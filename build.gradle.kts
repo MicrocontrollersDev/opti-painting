@@ -1,7 +1,7 @@
 plugins {
     `java-library`
 
-    id("fabric-loom") version "1.6.+"
+    id("fabric-loom") version "1.11.+"
 
     id("me.modmuss50.mod-publish-plugin") version "0.5.+"
     `maven-publish`
@@ -10,7 +10,6 @@ plugins {
 }
 
 val mcVersion = property("mcVersion")!!.toString()
-val mcSemverVersion = stonecutter.current.version
 val mcDep = property("fmj.mcDep").toString()
 
 group = "dev.isxander"
@@ -31,10 +30,6 @@ loom {
             runDir("../../run")
         }
     }
-
-    mixin {
-        useLegacyMixinAp.set(false)
-    }
 }
 
 repositories {
@@ -43,7 +38,6 @@ repositories {
     maven("https://maven.isxander.dev/releases")
     maven("https://maven.isxander.dev/snapshots")
     maven("https://maven.parchmentmc.org")
-    maven("https://maven.quiltmc.org/repository/release")
     exclusiveContent {
         forRepository { maven("https://api.modrinth.com/maven") }
         filter { includeGroup("maven.modrinth") }
@@ -60,13 +54,12 @@ repositories {
 dependencies {
     minecraft("com.mojang:minecraft:$mcVersion")
     mappings(loom.layered {
-        // quilt does not support pre-releases so it is necessary to only layer if they exist
+        officialMojangMappings()
         optionalProp("deps.parchment") {
             parchment("org.parchmentmc.data:parchment-$it@zip")
         }
-
-        officialMojangMappings()
     })
+
     modImplementation("net.fabricmc:fabric-loader:${property("deps.fabricLoader")}")
 }
 
@@ -209,8 +202,4 @@ publishing {
 
 fun <T> optionalProp(property: String, block: (String) -> T?) {
     findProperty(property)?.toString()?.takeUnless { it.isBlank() }?.let(block)
-}
-
-fun isPropDefined(property: String): Boolean {
-    return findProperty(property)?.toString()?.isNotBlank() ?: false
 }

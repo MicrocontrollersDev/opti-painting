@@ -1,28 +1,21 @@
-import dev.kikugie.stonecutter.gradle.StonecutterSettings
-
 pluginManagement {
     repositories {
         mavenCentral()
         gradlePluginPortal()
         maven("https://maven.fabricmc.net")
-        maven("https://maven.quiltmc.org/repository/release")
         maven("https://maven.kikugie.dev/releases")
     }
 }
 
 plugins {
-    id("dev.kikugie.stonecutter") version "0.3.2"
+    id("dev.kikugie.stonecutter") version "0.7.6"
 }
 
-extensions.configure<StonecutterSettings> {
-    kotlinController(true)
-    centralScript("build.gradle.kts")
-    shared {
-        versions("1.19.2", "1.20.1", "1.20.6")
-        vcsVersion("1.20.6")
+stonecutter {
+    create(rootProject) {
+        versions("1.21.8")
+        vcsVersion = "1.21.8"
     }
-    create(rootProject)
 }
 
 rootProject.name = "opti-painting"
-

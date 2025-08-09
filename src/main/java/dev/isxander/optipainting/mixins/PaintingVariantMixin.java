@@ -1,9 +1,10 @@
 package dev.isxander.optipainting.mixins;
 
-import net.minecraft.client.Minecraft;
+import com.llamalad7.mixinextras.injector.ModifyExpressionValue;
+import net.minecraft.world.entity.decoration.PaintingVariant;
 import org.spongepowered.asm.mixin.Mixin;
+import org.spongepowered.asm.mixin.injection.At;
 
-/*? if >1.20.6 {*//*
 @Mixin(PaintingVariant.class)
 public class PaintingVariantMixin {
     @ModifyExpressionValue(method = "method_59948", at = @At(value = "CONSTANT", args = "intValue=16"))
@@ -11,8 +12,4 @@ public class PaintingVariantMixin {
         return Integer.MAX_VALUE;
     }
 }
-*//*? } else {*/
-@Mixin(Minecraft.class)
-public class PaintingVariantMixin {
-}
-/*?}*/
+
